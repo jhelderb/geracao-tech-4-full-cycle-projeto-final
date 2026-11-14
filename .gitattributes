@@ -1,0 +1,24 @@
+# Normalização de fim de linha para compatibilidade entre Linux e Windows
+* text=auto
+
+# Arquivos que devem manter LF (Unix) em todos os sistemas
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.ts text eol=lf
+*.js text eol=lf
+*.mts text eol=lf
+*.mjs text eol=lf
+*.gitignore text eol=lf
+*.dockerignore text eol=lf
+Dockerfile text eol=lf
+docker-compose.yml text eol=lf
+
+# Arquivos que não devem ser alterados
+node_modules/ -text
+dist/ -text
+coverage/ -text
+*.log -text
+*.db -text
+.env -text

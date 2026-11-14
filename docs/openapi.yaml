@@ -1,0 +1,258 @@
+openapi: 3.1.0
+info:
+  title: API de Pedidos
+  version: 1.0.0
+  description: |
+    API de domínio único do Projeto B — simples.
+    Fluxo principal: criar um pedido e consultá-lo pelo identificador.
+  contact:
+    name: Projeto Final Full Cycle 4.0
+  license:
+    name: Uso educacional
+    identifier: LicenseRef-Uso-Educacional
+servers:
+  - url: /
+    description: Mesmo host da aplicação
+security: []
+tags:
+  - name: Pedidos
+    description: Criação e consulta de pedidos
+paths:
+  /pedidos:
+    post:
+      tags:
+        - Pedidos
+      summary: Cria um pedido
+      operationId: criarPedido
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CriarPedidoRequest'
+            examples:
+              pedidoValido:
+                summary: Pedido com dois itens
+                value:
+                  clienteNome: Maria Silva
+                  itens:
+                    - descricao: Café
+                      valorUnitarioCentavos: 1000
+                      quantidade: 2
+                    - descricao: Pão de queijo
+                      valorUnitarioCentavos: 500
+                      quantidade: 1
+      responses:
+        '201':
+          description: Pedido criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pedido'
+              examples:
+                pedidoCriado:
+                  value:
+                    id: 93b88219-e81d-4cc3-9deb-6759c7df5424
+                    clienteNome: Maria Silva
+                    itens:
+                      - descricao: Café
+                        valorUnitarioCentavos: 1000
+                        quantidade: 2
+                      - descricao: Pão de queijo
+                        valorUnitarioCentavos: 500
+                        quantidade: 1
+                    totalCentavos: 2500
+                    status: PENDENTE
+                    criadoEm: '2026-11-10T23:48:27.284Z'
+        '400':
+          description: Payload inválido, JSON malformado ou regra de domínio violada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+              examples:
+                validacao:
+                  value:
+                    erro: VALIDACAO
+                    mensagem: Dados inválidos.
+                    detalhes:
+                      - campo: clienteNome
+                        mensagem: String must contain at least 2 character(s)
+                jsonInvalido:
+                  value:
+                    erro: JSON_INVALIDO
+                    mensagem: O corpo da requisição deve ser um JSON válido.
+        '413':
+          description: Corpo da requisição maior que o limite permitido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+              examples:
+                corpoMuitoGrande:
+                  value:
+                    erro: CORPO_MUITO_GRANDE
+                    mensagem: O corpo da requisição excede o limite permitido.
+        '500':
+          description: Erro interno não esperado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+              examples:
+                erroInterno:
+                  value:
+                    erro: ERRO_INTERNO
+                    mensagem: Erro interno do servidor.
+  /pedidos/{id}:
+    get:
+      tags:
+        - Pedidos
+      summary: Consulta um pedido pelo identificador
+      operationId: buscarPedido
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Identificador UUID do pedido
+          schema:
+            type: string
+            format: uuid
+          example: 93b88219-e81d-4cc3-9deb-6759c7df5424
+      responses:
+        '200':
+          description: Pedido encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pedido'
+        '404':
+          description: Pedido não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+              examples:
+                naoEncontrado:
+                  value:
+                    erro: PEDIDO_NAO_ENCONTRADO
+                    mensagem: Pedido não encontrado.
+        '500':
+          description: Erro interno não esperado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+components:
+  schemas:
+    ItemPedido:
+      type: object
+      additionalProperties: false
+      required:
+        - descricao
+        - valorUnitarioCentavos
+        - quantidade
+      properties:
+        descricao:
+          type: string
+          minLength: 2
+          maxLength: 200
+          examples:
+            - Café
+        valorUnitarioCentavos:
+          type: integer
+          minimum: 1
+          maximum: 100000000
+          examples:
+            - 1000
+        quantidade:
+          type: integer
+          minimum: 1
+          maximum: 999
+          examples:
+            - 2
+    CriarPedidoRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - clienteNome
+        - itens
+      properties:
+        clienteNome:
+          type: string
+          minLength: 2
+          maxLength: 120
+          examples:
+            - Maria Silva
+        itens:
+          type: array
+          minItems: 1
+          maxItems: 50
+          items:
+            $ref: '#/components/schemas/ItemPedido'
+    Pedido:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - clienteNome
+        - itens
+        - totalCentavos
+        - status
+        - criadoEm
+      properties:
+        id:
+          type: string
+          format: uuid
+        clienteNome:
+          type: string
+          minLength: 2
+          maxLength: 120
+        itens:
+          type: array
+          minItems: 1
+          maxItems: 50
+          items:
+            $ref: '#/components/schemas/ItemPedido'
+        totalCentavos:
+          type: integer
+          minimum: 1
+          description: Soma de valor unitário multiplicado pela quantidade de cada item.
+        status:
+          type: string
+          enum:
+            - PENDENTE
+        criadoEm:
+          type: string
+          format: date-time
+    DetalheValidacao:
+      type: object
+      additionalProperties: false
+      required:
+        - campo
+        - mensagem
+      properties:
+        campo:
+          type: string
+          examples:
+            - itens.0.quantidade
+        mensagem:
+          type: string
+    Erro:
+      type: object
+      additionalProperties: false
+      required:
+        - erro
+        - mensagem
+      properties:
+        erro:
+          type: string
+          description: Código estável do erro.
+          examples:
+            - VALIDACAO
+        mensagem:
+          type: string
+        detalhes:
+          type: array
+          items:
+            $ref: '#/components/schemas/DetalheValidacao'
