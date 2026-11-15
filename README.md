@@ -208,8 +208,7 @@ projeto-final/
 │   ├── adr/
 │   ├── desempenho.md
 │   ├── ia.md
-│   ├── openapi.yaml
-│   └── roteiro-video.md
+│   └── openapi.yaml
 ├── Dockerfile
 ├── docker-compose.yml
 ├── .env.example
@@ -237,4 +236,4 @@ projeto-final/
 
 ## Apresentação em vídeo (opcional)
 
-O roteiro de 10 minutos está em [`docs/roteiro-video.md`](docs/roteiro-video.md). A apresentação é opcional, mas conta como bônus; o vídeo deve ser enviado pelo Moodle até **13/11**.
+A apresentação é opcional, mas conta como bônus; o vídeo deve ser enviado pelo Moodle até **13/11**.
