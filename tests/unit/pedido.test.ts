@@ -10,8 +10,8 @@ describe('criarPedido', () => {
       {
         clienteNome: '  Maria Silva  ',
         itens: [
-          { descricao: '  Café  ', valorUnitarioCentavos: 1000, quantidade: 2 },
-          { descricao: 'Pão de queijo', valorUnitarioCentavos: 500, quantidade: 1 },
+          { descricao: '  Café  ', valorUnitario: 10.0, quantidade: 2 },
+          { descricao: 'Pão de queijo', valorUnitario: 5.0, quantidade: 1 },
         ],
       },
       'pedido-1',
@@ -22,10 +22,10 @@ describe('criarPedido', () => {
       id: 'pedido-1',
       clienteNome: 'Maria Silva',
       itens: [
-        { descricao: 'Café', valorUnitarioCentavos: 1000, quantidade: 2 },
-        { descricao: 'Pão de queijo', valorUnitarioCentavos: 500, quantidade: 1 },
+        { descricao: 'Café', valorUnitario: 10.0, quantidade: 2 },
+        { descricao: 'Pão de queijo', valorUnitario: 5.0, quantidade: 1 },
       ],
-      totalCentavos: 2500,
+      total: 25.0,
       status: 'PENDENTE',
       criadoEm: '2026-11-10T12:00:00.000Z',
     });
@@ -36,7 +36,7 @@ describe('criarPedido', () => {
       criarPedido(
         {
           clienteNome: ' A ',
-          itens: [{ descricao: 'Café', valorUnitarioCentavos: 1000, quantidade: 1 }],
+          itens: [{ descricao: 'Café', valorUnitario: 10.0, quantidade: 1 }],
         },
         'pedido-1',
         dataFixa,
@@ -49,7 +49,7 @@ describe('criarPedido', () => {
       criarPedido(
         {
           clienteNome: 'a'.repeat(121),
-          itens: [{ descricao: 'Café', valorUnitarioCentavos: 1000, quantidade: 1 }],
+          itens: [{ descricao: 'Café', valorUnitario: 10.0, quantidade: 1 }],
         },
         'pedido-1',
         dataFixa,
@@ -66,7 +66,7 @@ describe('criarPedido', () => {
   it('rejeita pedido com itens demais', () => {
     const itens = Array.from({ length: 51 }, (_, indice) => ({
       descricao: `Item ${indice}`,
-      valorUnitarioCentavos: 100,
+      valorUnitario: 10.0,
       quantidade: 1,
     }));
 
@@ -80,7 +80,7 @@ describe('criarPedido', () => {
       criarPedido(
         {
           clienteNome: 'Maria',
-          itens: [{ descricao: ' ', valorUnitarioCentavos: 1000, quantidade: 1 }],
+          itens: [{ descricao: ' ', valorUnitario: 10.0, quantidade: 1 }],
         },
         'pedido-1',
         dataFixa,
@@ -93,12 +93,12 @@ describe('criarPedido', () => {
       criarPedido(
         {
           clienteNome: 'Maria',
-          itens: [{ descricao: 'Café', valorUnitarioCentavos: 0, quantidade: 1 }],
+          itens: [{ descricao: 'Café', valorUnitario: 0, quantidade: 1 }],
         },
         'pedido-1',
         dataFixa,
       ),
-    ).toThrowError('O valor unitário do item 1 deve ser um inteiro positivo em centavos.');
+    ).toThrowError('O valor unitário do item 1 deve ser um número positivo em reais com no máximo 2 casas decimais.');
   });
 
   it('rejeita quantidade inválida', () => {
@@ -106,11 +106,24 @@ describe('criarPedido', () => {
       criarPedido(
         {
           clienteNome: 'Maria',
-          itens: [{ descricao: 'Café', valorUnitarioCentavos: 1000, quantidade: 0 }],
+          itens: [{ descricao: 'Café', valorUnitario: 10.0, quantidade: 0 }],
         },
         'pedido-1',
         dataFixa,
       ),
     ).toThrowError('A quantidade do item 1 deve ser um inteiro entre 1 e 999.');
+  });
+
+  it('rejeita valor unitário com mais de 2 casas decimais', () => {
+    expect(() =>
+      criarPedido(
+        {
+          clienteNome: 'Maria',
+          itens: [{ descricao: 'Café', valorUnitario: 10.123, quantidade: 1 }],
+        },
+        'pedido-1',
+        dataFixa,
+      ),
+    ).toThrowError('O valor unitário do item 1 deve ser um número positivo em reais com no máximo 2 casas decimais.');
   });
 });

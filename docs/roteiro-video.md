@@ -55,9 +55,10 @@ curl -sS -X POST http://localhost:3000/pedidos \
   -d '{
     "clienteNome": "Maria Silva",
     "itens": [
-      { "descricao": "Café", "valorUnitarioCentavos": 1000, "quantidade": 2 },
-      { "descricao": "Pão de queijo", "valorUnitarioCentavos": 500, "quantidade": 1 }
-    ]
+      { "descricao": "Café", "valorUnitarioReais": 10.00, "quantidade": 2 },
+      { "descricao": "Pão de queijo", "valorUnitarioReais": 5.00, "quantidade": 1 }
+    ],
+    "totalReais": 25.00
   }' | tee /tmp/pedido.json
 ```
 
@@ -70,7 +71,8 @@ curl -sS "http://localhost:3000/pedidos/$ID"
 
 Explicar:
 
-- O total foi calculado no domínio: `2 × 1000 + 1 × 500 = 2500`.
+- O total foi calculado no domínio: 2 cafés a R$ 10,00 + 1 pão de queijo a R$ 5,00 = total R$ 25,00.
+- Este exemplo de apresentação usa campos em reais (valorUnitarioReais, totalReais) para facilitar a leitura.
 - O pedido foi persistido no SQLite.
 - A consulta retorna o mesmo pedido.
 
@@ -138,7 +140,7 @@ Mostrar os números medidos:
 - k6: 1 VU por 10 segundos.
 - 40/40 checks aprovados.
 - 0% de falhas HTTP.
-- p95 de 4,96 ms (varia entre 2,80 ms e 4,96 ms em medições recentes)
+- p95 de 3.67 ms (varia entre 2.19 ms e 4.96 ms em medições recentes)
 - Threshold: `p(95)<200` e `rate<0.01`.
 
 Explicar as limitações:

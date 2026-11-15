@@ -49,14 +49,14 @@ describe('API de pedidos', () => {
     const criacao = await request(app).post('/pedidos').send({
       clienteNome: 'Maria Silva',
       itens: [
-        { descricao: 'Café', valorUnitarioCentavos: 1000, quantidade: 2 },
-        { descricao: 'Pão de queijo', valorUnitarioCentavos: 500, quantidade: 1 },
+        { descricao: 'Café', valorUnitario: 10.0, quantidade: 2 },
+        { descricao: 'Pão de queijo', valorUnitario: 5.0, quantidade: 1 },
       ],
     });
 
     expect(criacao.status).toBe(201);
     expect(criacao.body.id).toEqual(expect.any(String));
-    expect(criacao.body.totalCentavos).toBe(2500);
+    expect(criacao.body.total).toBe(25.0);
     expect(criacao.body.status).toBe('PENDENTE');
 
     const consulta = await request(app).get(`/pedidos/${criacao.body.id}`);

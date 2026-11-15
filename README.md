@@ -95,23 +95,24 @@ curl -sS -X POST http://localhost:3000/pedidos \
   -d '{
     "clienteNome": "Maria Silva",
     "itens": [
-      { "descricao": "Café", "valorUnitarioCentavos": 1000, "quantidade": 2 },
-      { "descricao": "Pão de queijo", "valorUnitarioCentavos": 500, "quantidade": 1 }
-    ]
+      { "descricao": "Café", "valorUnitarioReais": 10.00, "quantidade": 2 },
+      { "descricao": "Pão de queijo", "valorUnitarioReais": 5.00, "quantidade": 1 }
+    ],
+    "totalReais": 25.00
   }'
 ```
 
-Resposta `201 Created`:
+Resposta `201 Created` (exemplo em reais para apresentação):
 
 ```json
 {
   "id": "93b88219-e81d-4cc3-9deb-6759c7df5424",
   "clienteNome": "Maria Silva",
   "itens": [
-    { "descricao": "Café", "valorUnitarioCentavos": 1000, "quantidade": 2 },
-    { "descricao": "Pão de queijo", "valorUnitarioCentavos": 500, "quantidade": 1 }
+    { "descricao": "Café", "valorUnitarioReais": 10.00, "quantidade": 2 },
+    { "descricao": "Pão de queijo", "valorUnitarioReais": 5.00, "quantidade": 1 }
   ],
-  "totalCentavos": 2500,
+  "totalReais": 25.00,
   "status": "PENDENTE",
   "criadoEm": "2026-11-10T23:48:27.284Z"
 }

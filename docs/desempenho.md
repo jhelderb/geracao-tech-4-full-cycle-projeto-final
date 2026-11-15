@@ -40,18 +40,18 @@ thresholds: {
 | Checks aprovados | 40/40 (100%) |
 | Requisições HTTP | 20 |
 | Falhas HTTP | 0,00% |
-| p(95) | **4,96 ms** (varia entre 2,80 ms e 4,96 ms) |
-| Média | 2,89 ms |
-| Mediana | 2,38 ms |
-| p(90) | 4,73 ms |
-| Máximo | 5,22 ms |
+| p(95) | **3.67 ms** (varia entre 2.19 ms e 4.96 ms em medições recentes) |
+| Média | 2.19 ms |
+| Mediana | 2.09 ms |
+| p(90) | 3.32 ms |
+| Máximo | 4.77 ms |
 | Iterações | 10 |
 
 Todos os thresholds foram aprovados:
 
 ```text
 http_req_duration
-✓ 'p(95)<200' p(95)=4.96ms
+✓ 'p(95)<200' p(95)=3.67ms
 
 http_req_failed
 ✓ 'rate<0.01' rate=0.00%
@@ -61,7 +61,7 @@ http_req_failed
 
 **SLO do fluxo principal:** p95 abaixo de 200 ms e taxa de falhas abaixo de 1% no smoke test.
 
-O resultado medido ficou muito abaixo do limite: p95 de 4,96 ms e 0% de falhas.
+O resultado medido ficou muito abaixo do limite: p95 de 3.67 ms e 0% de falhas.
 
 ## Análise
 

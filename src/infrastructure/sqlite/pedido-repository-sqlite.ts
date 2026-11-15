@@ -6,7 +6,7 @@ interface PedidoRow {
   id: string;
   cliente_nome: string;
   itens_json: string;
-  total_centavos: number;
+  total: number;
   status: string;
   criado_em: string;
 }
@@ -18,15 +18,15 @@ export class PedidoRepositorySqlite implements PedidoRepository {
     this.db
       .prepare(
         `INSERT INTO pedidos
-          (id, cliente_nome, itens_json, total_centavos, status, criado_em)
+          (id, cliente_nome, itens_json, total, status, criado_em)
          VALUES
-          (@id, @clienteNome, @itensJson, @totalCentavos, @status, @criadoEm)`,
+          (@id, @clienteNome, @itensJson, @total, @status, @criadoEm)`,
       )
       .run({
         id: pedido.id,
         clienteNome: pedido.clienteNome,
         itensJson: JSON.stringify(pedido.itens),
-        totalCentavos: pedido.totalCentavos,
+        total: pedido.total,
         status: pedido.status,
         criadoEm: pedido.criadoEm,
       });
@@ -35,7 +35,7 @@ export class PedidoRepositorySqlite implements PedidoRepository {
   async buscarPorId(id: string): Promise<Pedido | null> {
     const row = this.db
       .prepare(
-        `SELECT id, cliente_nome, itens_json, total_centavos, status, criado_em
+        `SELECT id, cliente_nome, itens_json, total, status, criado_em
          FROM pedidos
          WHERE id = ?`,
       )
@@ -49,7 +49,7 @@ export class PedidoRepositorySqlite implements PedidoRepository {
       id: row.id,
       clienteNome: row.cliente_nome,
       itens: JSON.parse(row.itens_json) as ItemPedido[],
-      totalCentavos: row.total_centavos,
+      total: row.total,
       status: row.status as StatusPedido,
       criadoEm: row.criado_em,
     };

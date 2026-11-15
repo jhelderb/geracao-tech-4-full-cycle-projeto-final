@@ -14,10 +14,24 @@ export interface DependenciasApp {
   logger: Logger;
 }
 
+const valorUnitarioSchema = z
+  .number()
+  .positive()
+  .max(1_000_000)
+  .refine(
+    (val) => {
+      const str = String(val);
+      return !str.includes('.') || str.split('.')[1].length <= 2;
+    },
+    {
+      message: 'Valor deve ter no máximo 2 casas decimais',
+    },
+  );
+
 const itemSchema = z
   .object({
     descricao: z.string().trim().min(2).max(200),
-    valorUnitarioCentavos: z.number().int().positive().max(100_000_000),
+    valorUnitario: valorUnitarioSchema,
     quantidade: z.number().int().positive().max(999),
   })
   .strict();

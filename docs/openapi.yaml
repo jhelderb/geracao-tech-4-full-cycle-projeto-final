@@ -37,10 +37,10 @@ paths:
                   clienteNome: Maria Silva
                   itens:
                     - descricao: Café
-                      valorUnitarioCentavos: 1000
+                      valorUnitario: 10.00
                       quantidade: 2
                     - descricao: Pão de queijo
-                      valorUnitarioCentavos: 500
+                      valorUnitario: 5.00
                       quantidade: 1
       responses:
         '201':
@@ -56,12 +56,12 @@ paths:
                     clienteNome: Maria Silva
                     itens:
                       - descricao: Café
-                        valorUnitarioCentavos: 1000
+                        valorUnitario: 10.00
                         quantidade: 2
                       - descricao: Pão de queijo
-                        valorUnitarioCentavos: 500
+                        valorUnitario: 5.00
                         quantidade: 1
-                    totalCentavos: 2500
+                    total: 25.00
                     status: PENDENTE
                     criadoEm: '2026-11-10T23:48:27.284Z'
         '400':
@@ -143,6 +143,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Erro'
+              examples:
+                erroInterno:
+                  value:
+                    erro: ERRO_INTERNO
+                    mensagem: Erro interno do servidor.
 components:
   schemas:
     ItemPedido:
@@ -150,7 +155,7 @@ components:
       additionalProperties: false
       required:
         - descricao
-        - valorUnitarioCentavos
+        - valorUnitario
         - quantidade
       properties:
         descricao:
@@ -159,12 +164,12 @@ components:
           maxLength: 200
           examples:
             - Café
-        valorUnitarioCentavos:
-          type: integer
-          minimum: 1
-          maximum: 100000000
+        valorUnitario:
+          type: number
+          minimum: 0.01
+          maximum: 1000000
           examples:
-            - 1000
+            - 10.00
         quantidade:
           type: integer
           minimum: 1
@@ -197,7 +202,7 @@ components:
         - id
         - clienteNome
         - itens
-        - totalCentavos
+        - total
         - status
         - criadoEm
       properties:
@@ -214,9 +219,9 @@ components:
           maxItems: 50
           items:
             $ref: '#/components/schemas/ItemPedido'
-        totalCentavos:
-          type: integer
-          minimum: 1
+        total:
+          type: number
+          minimum: 0.01
           description: Soma de valor unitário multiplicado pela quantidade de cada item.
         status:
           type: string

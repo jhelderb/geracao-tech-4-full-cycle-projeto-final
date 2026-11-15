@@ -17,7 +17,7 @@ export function abrirBanco(caminho: string): DatabaseConnection {
       id TEXT PRIMARY KEY,
       cliente_nome TEXT NOT NULL,
       itens_json TEXT NOT NULL,
-      total_centavos INTEGER NOT NULL,
+      total REAL NOT NULL,
       status TEXT NOT NULL,
       criado_em TEXT NOT NULL
     );

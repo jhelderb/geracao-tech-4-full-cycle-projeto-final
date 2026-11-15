@@ -16,8 +16,8 @@ export default function () {
   const payload = JSON.stringify({
     clienteNome: 'Cliente Smoke Test',
     itens: [
-      { descricao: 'Café', valorUnitarioCentavos: 1000, quantidade: 1 },
-      { descricao: 'Pão de queijo', valorUnitarioCentavos: 500, quantidade: 2 },
+      { descricao: 'Café', valorUnitario: 10.0, quantidade: 1 },
+      { descricao: 'Pão de queijo', valorUnitario: 5.0, quantidade: 2 },
     ],
   });
 

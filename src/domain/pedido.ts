@@ -4,7 +4,7 @@ export type StatusPedido = 'PENDENTE';
 
 export interface ItemPedido {
   descricao: string;
-  valorUnitarioCentavos: number;
+  valorUnitario: number;
   quantidade: number;
 }
 
@@ -12,7 +12,7 @@ export interface Pedido {
   id: string;
   clienteNome: string;
   itens: ItemPedido[];
-  totalCentavos: number;
+  total: number;
   status: StatusPedido;
   criadoEm: string;
 }
@@ -24,7 +24,7 @@ export interface CriarPedidoInput {
 
 const LIMITE_ITENS = 50;
 const LIMITE_QUANTIDADE = 999;
-const LIMITE_VALOR_UNITARIO = 100_000_000;
+const LIMITE_VALOR_UNITARIO = 1_000_000;
 
 export function criarPedido(input: CriarPedidoInput, id: string, criadoEm: Date): Pedido {
   const clienteNome = input.clienteNome.trim();
@@ -53,14 +53,18 @@ export function criarPedido(input: CriarPedidoInput, id: string, criadoEm: Date)
       );
     }
 
+    const valorStr = String(item.valorUnitario);
+    const casasDecimais = valorStr.includes('.') ? valorStr.split('.')[1].length : 0;
+
     if (
-      !Number.isSafeInteger(item.valorUnitarioCentavos) ||
-      item.valorUnitarioCentavos < 1 ||
-      item.valorUnitarioCentavos > LIMITE_VALOR_UNITARIO
+      !Number.isFinite(item.valorUnitario) ||
+      item.valorUnitario < 0.01 ||
+      item.valorUnitario > LIMITE_VALOR_UNITARIO ||
+      casasDecimais > 2
     ) {
       throw new DomainError(
         'ITEM_INVALIDO',
-        `O valor unitário do item ${indice + 1} deve ser um inteiro positivo em centavos.`,
+        `O valor unitário do item ${indice + 1} deve ser um número positivo em reais com no máximo 2 casas decimais.`,
       );
     }
 
@@ -77,21 +81,20 @@ export function criarPedido(input: CriarPedidoInput, id: string, criadoEm: Date)
 
     return {
       descricao,
-      valorUnitarioCentavos: item.valorUnitarioCentavos,
+      valorUnitario: Number(item.valorUnitario.toFixed(2)),
       quantidade: item.quantidade,
     };
   });
 
-  const totalCentavos = itens.reduce(
-    (total, item) => total + item.valorUnitarioCentavos * item.quantidade,
-    0,
+  const total = Number(
+    itens.reduce((total, item) => total + item.valorUnitario * item.quantidade, 0).toFixed(2),
   );
 
   return {
     id,
     clienteNome,
     itens,
-    totalCentavos,
+    total,
     status: 'PENDENTE',
     criadoEm: criadoEm.toISOString(),
   };
