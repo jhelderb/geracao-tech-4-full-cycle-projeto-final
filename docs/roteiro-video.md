@@ -37,6 +37,21 @@ Destacar a primeira linha:
 
 ## 1:00–4:00 — Demonstração: sobe, roda e responde
 
+### Estrutura do repositório
+
+```bash
+find . -maxdepth 2 -not -path './.git/*' -not -path './node_modules/*' -not -path './dist/*' -not -path './coverage/*' | sort
+```
+
+Explicar que a estrutura segue o esperado para o Projeto B:
+
+- `docker-compose.yml`, `Dockerfile`, `README.md`, `.env.example`, `.github/workflows/ci.yml` na raiz
+- `src/` com o código da aplicação
+- `tests/` com testes unitários, de integração e k6
+- `docs/` com ADR, OpenAPI, desempenho, uso de IA e roteiro de vídeo
+
+Mostrar que a pasta `tests/` existe com subpastas `unit/`, `integration/` e `k6/`.
+
 ### Subir a aplicação
 
 ```bash
@@ -78,10 +93,18 @@ Explicar:
 ### Mostrar observabilidade
 
 ```bash
-curl -sS http://localhost:3000/metrics | head -20
+curl -sS http://localhost:3000/health | python3 -m json.tool
+curl -sS http://localhost:3000/metrics | grep -E 'http_requests_total|http_request_duration' | head -5
 ```
 
-Mostrar que existem logs estruturados e a métrica `http_requests_total`.
+Explicar:
+
+- `/health` retorna `{"status": "ok", ...}` confirmando que a aplicação está rodando.
+- `/metrics` expõe métricas Prometheus. Cada linha do `http_requests_total` mostra:
+  - `metodo`: verbo HTTP (GET, POST)
+  - `rota`: endpoint acessado (/health, /pedidos, /pedidos/:id)
+  - `status`: código de resposta HTTP (200, 201)
+  - o número ao final: quantidade de requisições com esse conjunto de labels
 
 ## 4:00–7:00 — Uma decisão técnica e a alternativa descartada
 
@@ -114,17 +137,52 @@ Fechar dizendo que a decisão está registrada e justificada na ADR.
 
 ### Testes e cobertura
 
+**Testes unitários de domínio:**
+
+```bash
+npm run test -- tests/unit/pedido.test.ts
+```
+
+Explicar o relatório do Vitest:
+
+- `Test Files 1 passed (1)`: um arquivo de teste executado e aprovado
+- `Tests 9 passed (9)`: nove casos de teste de domínio aprovados
+- `Start at` / `Duration`: tempo de início e duração da execução
+
+**Teste de integração do fluxo principal:**
+
+```bash
+npm run test -- tests/integration/pedidos.test.ts
+```
+
+Explicar o relatório do Vitest:
+
+- `Test Files 1 passed (1)`: um arquivo de teste de integração executado e aprovado
+- `Tests 8 passed (8)`: oito casos de teste de fluxo aprovados (criar, consultar, validações, 404, JSON malformado, corpo grande)
+- `Start at` / `Duration`: tempo de início e duração da execução
+
+**Cobertura de código:**
+
 ```bash
 npm run test:coverage
 ```
 
+Explicar que o comando executa o Vitest com o provedor v8 e gera um relatório de cobertura:
+
+- `File`: cada arquivo-fonte analisado
+- `% Stmts`: porcentagem de statements (declarações) cobertos
+- `% Branch`: porcentagem de ramificações (if/else) cobertas
+- `% Funcs`: porcentagem de funções cobertas
+- `% Lines`: porcentagem de linhas cobertas
+- `Uncovered Line #s`: números de linhas não cobertas pelos testes
+
 Mostrar o resumo:
 
-- 16 testes passando.
-- Statements: 91,66%.
-- Branches: 90,00%.
+- 17 testes passando (9 unitários + 8 de integração)
+- Statements: 92,03%.
+- Branches: 89,09%.
 - Functions: 100,00%.
-- Lines: 91,58%.
+- Lines: 91,96%.
 
 ### Desempenho
 
