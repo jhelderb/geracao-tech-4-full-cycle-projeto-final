@@ -5,3 +5,5 @@ data/*.db
 data/*.db-*
 .env
 *.log
+demo-video.sh
+docs/roteiro-video.md
