@@ -34,14 +34,8 @@ sleep 2
 curl -sS http://localhost:3000/health | python3 -m json.tool
 PAUSA
 
-# --- ETAPA 4: Criar pedido (narração em reais) ---
+# --- ETAPA 4: Criar pedido ---
 echo ">>> ETAPA 4: Criando um pedido"
-echo ""
-echo "NARRACAO sugerida: Crio um pedido com 2 cafes a R$ 10,00 cada e 1 pao de queijo a R$ 5,00."
-echo "Total: R$ 25,00 (calculado automaticamente pelo domínio, não enviado pelo cliente)."
-echo ""
-echo "Os campos da API usam valores em reais (valorUnitario)."
-echo ""
 curl -sS -X POST http://localhost:3000/pedidos \
   -H 'Content-Type: application/json' \
   -d '{
@@ -96,14 +90,6 @@ PAUSA
 
 # --- ETAPA 12: Contribuidores ---
 echo ">>> ETAPA 12: Contribuidores e encerramento"
-echo ""
-echo "NARRACAO sugerida:"
-echo "O projeto foi entregue individualmente. O autor registrado no CONTRIBUTORS.md é José H. B. (josehb),"
-echo "responsável pela definição do domínio de pedidos, implementação da API, regras de domínio,"
-echo "persistência SQLite, testes unitários e de integração, Docker Compose, CI, ADR, OpenAPI,"
-echo "smoke test k6 e documentação de desempenho. Não houve participação de grupo."
-echo "Obrigado e fico à disposição para perguntas."
-echo ""
 sed -n '1,12p' CONTRIBUTORS.md
 echo ""
 echo "=============================================="
