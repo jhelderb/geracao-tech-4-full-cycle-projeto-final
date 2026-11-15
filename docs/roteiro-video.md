@@ -55,10 +55,9 @@ curl -sS -X POST http://localhost:3000/pedidos \
   -d '{
     "clienteNome": "Maria Silva",
     "itens": [
-      { "descricao": "Café", "valorUnitarioReais": 10.00, "quantidade": 2 },
-      { "descricao": "Pão de queijo", "valorUnitarioReais": 5.00, "quantidade": 1 }
-    ],
-    "totalReais": 25.00
+      { "descricao": "Café", "valorUnitario": 10.00, "quantidade": 2 },
+      { "descricao": "Pão de queijo", "valorUnitario": 5.00, "quantidade": 1 }
+    ]
   }' | tee /tmp/pedido.json
 ```
 
@@ -72,7 +71,7 @@ curl -sS "http://localhost:3000/pedidos/$ID"
 Explicar:
 
 - O total foi calculado no domínio: 2 cafés a R$ 10,00 + 1 pão de queijo a R$ 5,00 = total R$ 25,00.
-- Este exemplo de apresentação usa campos em reais (valorUnitarioReais, totalReais) para facilitar a leitura.
+- Internamente o sistema armazena os valores em reais (valorUnitario, total), mas a narração usa reais, moeda corrente no Brasil-BR.
 - O pedido foi persistido no SQLite.
 - A consulta retorna o mesmo pedido.
 

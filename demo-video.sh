@@ -38,9 +38,9 @@ PAUSA
 echo ">>> ETAPA 4: Criando um pedido"
 echo ""
 echo "NARRACAO sugerida: Crio um pedido com 2 cafes a R$ 10,00 cada e 1 pao de queijo a R$ 5,00."
-echo "Total: R$ 25,00 (exemplo em reais para a apresentacao)."
+echo "Total: R$ 25,00 (calculado automaticamente pelo domínio, não enviado pelo cliente)."
 echo ""
-echo "Os campos da API usam valores em reais (valorUnitario, total)."
+echo "Os campos da API usam valores em reais (valorUnitario)."
 echo ""
 curl -sS -X POST http://localhost:3000/pedidos \
   -H 'Content-Type: application/json' \
@@ -49,8 +49,7 @@ curl -sS -X POST http://localhost:3000/pedidos \
     "itens": [
       { "descricao": "Café", "valorUnitario": 10.00, "quantidade": 2 },
       { "descricao": "Pão de queijo", "valorUnitario": 5.00, "quantidade": 1 }
-    ],
-    "total": 25.00
+    ]
   }' | tee /tmp/pedido-demo.json | python3 -m json.tool
 ID=$(python3 -c 'import json; print(json.load(open("/tmp/pedido-demo.json"))["id"])')
 echo "ID gerado: $ID"
