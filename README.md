@@ -130,12 +130,12 @@ npm run openapi:lint
 npm run build
 ```
 
-Cobertura medida em 11/11/2026:
+Cobertura medida em 11/11/2026 (última validação local):
 
-- Statements: 91,66%
-- Branches: 90,00%
+- Statements: 92,03%
+- Branches: 89,09%
 - Functions: 100,00%
-- Lines: 91,58%
+- Lines: 91,96%
 
 Os limites mínimos configurados no Vitest são 85% para linhas, funções e statements, e 75% para branches.
 
@@ -151,8 +151,8 @@ O teste valida criação (`201`) e consulta (`200`) durante 10 segundos, com 1 V
 
 Resultado medido em 11/11/2026 no ambiente Docker local:
 
-- `p(95)`: **4,96 ms** (última medição; varia entre 2,80 ms e 4,96 ms, sempre bem abaixo do limite)
-- Média: 2,89 ms
+- `p(95)`: **3,67 ms** (última medição; varia entre 2,19 ms e 4,96 ms, sempre bem abaixo do limite)
+- Média: 2,19 ms
 - Falhas HTTP: **0,00%**
 - Checks aprovados: **40/40**
 
@@ -204,7 +204,6 @@ projeto-final/
 │   ├── integration/
 │   └── k6/
 ├── docs/
-│   ├── README.md
 │   ├── adr/
 │   ├── desempenho.md
 │   ├── ia.md
@@ -233,7 +232,3 @@ projeto-final/
 - [x] `docs/desempenho.md`
 - [x] `CONTRIBUTORS.md`
 - [x] `docs/ia.md`
-
-## Apresentação em vídeo (opcional)
-
-A apresentação é opcional, mas conta como bônus; o vídeo deve ser enviado pelo Moodle até **13/11**.

@@ -12,7 +12,7 @@ Validar o fluxo principal da API — criação e consulta de pedido — e medir 
 - Intervalo entre iterações: 1 segundo
 - Requisições por iteração: 1 `POST /pedidos` e 1 `GET /pedidos/{id}`
 - API: container Docker local com Node.js 22 e SQLite
-- Data da medição: 11/11/2026 (última validação; p95 varia entre 2,80 ms e 4,96 ms)
+- Data da medição: 11/11/2026 (última validação; p95 varia entre 2,19 ms e 4,96 ms)
 
 ## Ambiente
 
